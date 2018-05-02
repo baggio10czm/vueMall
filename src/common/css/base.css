@@ -1,0 +1,12 @@
+body, html{
+  line-height: 1;
+  font-weight: 200;
+  font-family: 'PingFang SC','STHeight-Light','Helvetica-Light','arial','sans-serif';
+}
+.clearfix:before, .clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
