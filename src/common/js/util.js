@@ -13,8 +13,7 @@ export function urlParse() {
 		arr.forEach((item) => {
 			let tempArr = item.substring(1).split('=');
 			let key = decodeURIComponent(tempArr[0]);
-			let value = decodeURIComponent(tempArr[1]);
-			obj[key] = value;
+      obj[key] = decodeURIComponent(tempArr[1]);
 		});
 	}
 	return obj;

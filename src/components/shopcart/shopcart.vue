@@ -3,9 +3,11 @@
     <div class="content">
       <div class="content-left">
         <div class="logo-wrapper">
+          <!-- 当选择商品总数大于0时候 套用 highLight 类-->
           <div :class="['logo',{'highLight':totalCount>0}]">
             <i class="icon-shopping_cart"></i>
           </div>
+          <!--购物车上的商品数量小图标-->
           <div class="num" v-show="totalCount>0">{{totalCount}}</div>
         </div>
         <div :class="['price',{'highLight':totalPrice>0}]">￥{{totalPrice}}</div>
@@ -17,6 +19,7 @@
         </div>
       </div>
     </div>
+    <!--动画小球-->
     <div class="ball-container">
       <div v-for="ball in balls">
         <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
@@ -26,6 +29,8 @@
         </transition>
       </div>
     </div>
+    <!--动画小球 END -->
+    <!--购物车商品列表-->
     <transition  name="list-ani">
       <div class="shopcart-list" v-show="listShow" @click.stop>
         <div class="list-header">
@@ -47,9 +52,12 @@
         </div>
       </div>
     </transition>
+    <!--购物车商品列表 END-->
+    <!--购物车商品列表 遮罩-->
     <transition name="mask-ani">
       <div class="list-mask" v-show="listShow" @click.stop="hideList"></div>
     </transition>
+    <!--购物车商品列表 遮罩 END-->
   </div>
 </template>
 
@@ -83,6 +91,7 @@
       }
     },
     props: {
+      // 选择的所有商品
       selectFoods:{
         type:Array
       },
@@ -94,6 +103,7 @@
       }
     },
     computed:{
+      // 计算所有选择商品总价
       totalPrice(){
         let total = 0;
         this.selectFoods.forEach((food)=>{
@@ -101,6 +111,7 @@
         });
         return total;
       },
+      // 计算所有选择商品个数
       totalCount(){
         let count = 0;
         this.selectFoods.forEach((food)=>{
@@ -108,14 +119,16 @@
         });
         return count;
       },
+      // 支付提示
       payDesc(){
+        // 当总价为0的时候
         if(this.totalPrice === 0){
           this.payClass = 'no-enough';
           return `￥${this.minPrice}元起送`
-        }else if (this.totalPrice < this.minPrice){
+        }else if (this.totalPrice < this.minPrice){   // 当总价小于最小配送额
           this.payClass = 'no-enough';
           return `还差￥${this.minPrice - this.totalPrice}元起送`
-        }else{
+        }else{  // 当大于配送额
           this.payClass = 'enough';
           return '去结算';
         }

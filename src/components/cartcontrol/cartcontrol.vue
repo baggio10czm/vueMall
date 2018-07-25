@@ -20,7 +20,7 @@
     },
     methods: {
       addCart(event) {
-        if (!this.food.count) {
+        if (!this.food.count) {  // 当没有count的时候，用$set触发dom变化
           this.$set(this.food, 'count', 1);
         } else {
           this.food.count++;

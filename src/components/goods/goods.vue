@@ -1,14 +1,18 @@
 <template>
   <div class="goods">
+    <!-- 左侧菜单 -->
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
         <li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex === index}" @click="selectMenu(index)">
           <span class="text border-bottom1px">
-            <span v-if="item.type > 0" :class="['icon',classNameArr[item.type]]"></span>{{item.name}}
+            <!-- 当type > 0 时才显示图标,  classNameArr是 className 数组,item.type对应不同的索引  -->
+            <i v-if="item.type > 0" :class="['icon',classNameArr[item.type]]"></i>{{item.name}}
           </span>
         </li>
       </ul>
     </div>
+    <!-- 左侧菜单 END-->
+    <!-- 商品列表 -->
     <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
         <li v-for="item in goods" class="food-list food-list-hook">
@@ -38,8 +42,13 @@
         </li>
       </ul>
     </div>
+    <!-- 商品列表 END-->
+    <!--购物车-->
     <shopCart ref="shopCart" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopCart>
+    <!--购物车 END-->
+    <!--商品详情-->
     <food :food="selectedFood" ref="foodComponent" @addCart="getControlDom"></food>
+    <!--商品详情 END-->
   </div>
 </template>
 
@@ -66,7 +75,6 @@
         foodsScroll: null,
         listHeight: [],
         scrollY: 0,
-        food:{},
         selectedFood:{}
       }
     },
@@ -82,6 +90,7 @@
       })
     },
     computed: {
+      // 监听当前scrollY变化,生成对应的 currentIndex
       currentIndex() {
         for (let i = 0; i < this.listHeight.length; i++) {
           let height1 = this.listHeight[i];
@@ -92,6 +101,7 @@
         }
         return 0;
       },
+      // 每次更改 goods (包括更改某一个商品数量)就会触发
       selectFoods(){
         let foods = [];
         this.goods.forEach((good)=>{
@@ -106,34 +116,45 @@
     },
     methods: {
       _initScroll() {
+        // 初始左侧菜单 Scroll
         this.meunScroll = new BScroll(this.$refs.menuWrapper, {
           click:true
         });
+        // 初始商品列表 Scroll
         this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
           click:true,
           probeType: 3
         });
         this.foodsScroll.on('scroll', (pos) => {
+          // 滚动Y轴的值,四舍五入后的正整数
           this.scrollY = Math.abs(Math.round(pos.y))
         })
       },
+      // 计算得到每个商品分类需要滚动Y轴的值
       _calculateHeight() {
+        // 得到每一个商品分类的 dom
         let foodsList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
-        let height = 0;
+        let height = 0;  // 第一个高度为0
         this.listHeight.push(height);
+        // 得到每个商品分类的高度并叠加(这样就得到每一个需要滚动Y轴的值) 并保存在数组
         for (let i = 0; i < foodsList.length; i++) {
           height += foodsList[i].clientHeight;
           this.listHeight.push(height);
         }
       },
+      // 点击左侧菜单,滚动到对应索引的列表高度
       selectMenu(index){
         this.foodsScroll.scrollTo(0,-this.listHeight[index],500);
       },
+      // 触发底部购物车的动画
       getControlDom(el){
         this.$refs.shopCart.drop(el);
       },
+      // 点商品显示商品详情
       selectFoodFn(food){
+        // 传值给food组件
         this.selectedFood = food;
+        // 调用food组件 show 方法
         this.$refs.foodComponent.show();
       }
     },
@@ -305,6 +326,6 @@
   .cartControl-wrapper {
     position: absolute;
     right: 0;
-    bottom: 12px;
+    bottom: 5px;
   }
 </style>

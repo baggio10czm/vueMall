@@ -1,6 +1,7 @@
 <template>
   <div class="seller" ref="sellerWrapper">
     <div class="seller-content">
+      <!--商家评价收藏配送-->
       <div class="overView">
         <h1 class="title">{{seller.name}}</h1>
         <div class="desc border-bottom1px">
@@ -33,7 +34,9 @@
           <span class="text">{{favoriteText}}</span>
         </div>
       </div>
+      <!--商家评价收藏配送 END-->
       <split></split>
+      <!--公告与活动-->
       <div class="bulletin">
         <h1 class="title">公告与活动</h1>
         <div class="content-wrapper border-bottom1px">
@@ -46,7 +49,9 @@
           <span class="text">{{item.description}}</span>
         </li>
       </ul>
+      <!--公告与活动 END-->
       <split></split>
+      <!--商家实景-->
       <div class="pics">
         <h1 class="title">商家实景</h1>
         <div class="pic-wrapper" ref="picWrapper">
@@ -57,13 +62,16 @@
           </ul>
         </div>
       </div>
+      <!--商家实景 END-->
       <split></split>
+      <!--商家信息-->
       <div class="info">
         <h1 class="title">商家信息</h1>
         <ul>
           <li class="info-item" v-for="info in seller.infos">{{info}}</li>
         </ul>
       </div>
+      <!--商家信息 END-->
     </div>
   </div>
 </template>
@@ -83,9 +91,11 @@
     },
     data() {
       return {
+        // 读取 缓存判断是否收藏
         favorite:(()=>{
           return loadFromLocal(this.seller.id,'favorite',false)
         })(),
+        // 活动图片对应class
         classNameArr: ['decrease', 'discount', 'special', 'invoice', 'guarantee']
       }
     },
@@ -100,24 +110,23 @@
       })
     },
     methods: {
-      picsWidth() {
+      picsWidth() { // 根据商家实景图片 计算容器宽度
         if (this.seller.pics) {
           let picWidth = 120;
           let margin = 6;
-          let width = (picWidth + margin) * this.seller.pics.length - 6;
+          let width = (picWidth + margin) * this.seller.pics.length - margin;  // -margin 是因为最后一个图 没有  margin-right
           this.$refs.picList.style.width = width + 'px';
 
           this.$nextTick(() => {
             this.picScroll = new BScroll(this.$refs.picWrapper, {
               scrollX: true,
-              eventPassthrough: 'vertical'
+              eventPassthrough: 'vertical'   // 纵向的滚动还是保留原生滚动
             })
           })
         }
       },
       toggleFavorite(){
         this.favorite = !this.favorite;
-        console.log(this.seller);
         saveToLocal(this.seller.id,'favorite',this.favorite)
       }
     },

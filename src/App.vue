@@ -2,9 +2,15 @@
   <div id="app">
     <mallHeader :seller="seller"></mallHeader>
     <div class="tab border-bottom1px">
-      <div class="tab-item"><router-link to="/goods">商品</router-link></div>
-      <div class="tab-item"><router-link to="/ratings">评论</router-link></div>
-      <div class="tab-item"><router-link to="/seller">商家</router-link></div>
+      <div class="tab-item">
+        <router-link to="/goods">商品</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="/ratings">评论</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="/seller">商家</router-link>
+      </div>
     </div>
     <keep-alive>
       <router-view :seller="seller"></router-view>
@@ -17,34 +23,36 @@
   import {ERR_OK} from 'config/config'
   import axios from 'axios'
   import {urlParse} from 'common/js/util'
-export default {
-  name: 'App',
-  data(){
-    return{
-      seller:{
-        id:(()=>{
-          let queryParam = urlParse();
-          return queryParam.id
-        })()
+
+  export default {
+    name: 'App',
+    data() {
+      return {
+        seller: {
+          id: (() => {
+            let queryParam = urlParse();
+            return queryParam.id
+          })()
+        }
       }
-    }
-  },
-  created(){
-    axios.get('api/seller?id='+ this.seller.id).then((res)=>{
-        if(res.data.errno === ERR_OK){
+    },
+    created() {
+      axios.get('api/seller?id=' + this.seller.id).then((res) => {
+        if (res.data.errno === ERR_OK) {
           this.seller = Object.assign({}, this.seller, res.data.data);
         }
-    })
-  },
-  components:{
-    mallHeader
-  },
+      })
+    },
+    components: {
+      mallHeader
+    },
 
-}
+  }
 </script>
 
 <style>
   @import "common/css/base.css";
+
   .tab {
     display: flex;
     width: 100%;
@@ -52,16 +60,19 @@ export default {
     line-height: 40px;
     position: relative;
   }
-  .tab .tab-item{
+
+  .tab .tab-item {
     flex: 1;
     text-align: center;
   }
-.tab .tab-item a {
-  display: block;
-  font-size: 14px;
-  color: rgb(77,85,93);
-}
-.tab .tab-item a.tabs-active {
-  color: rgb(240,20,20);
- }
+
+  .tab .tab-item a {
+    display: block;
+    font-size: 14px;
+    color: rgb(77, 85, 93);
+  }
+
+  .tab .tab-item a.tabs-active {
+    color: rgb(240, 20, 20);
+  }
 </style>

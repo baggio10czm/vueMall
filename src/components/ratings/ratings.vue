@@ -1,6 +1,7 @@
 <template>
   <div class="ratings" ref='ratingsWrapper'>
     <div class="ratings-content">
+      <!-- 评价信息 -->
       <div class="overView">
         <div class="overView-left">
           <h1 class="score">{{seller.score}}</h1>
@@ -24,30 +25,42 @@
           </div>
         </div>
       </div>
+      <!-- 评价信息 END-->
       <split></split>
+      <!-- 评价过滤 -->
       <ratingSelect :selectType="selectType" :onlyContent="onlyContent" :desc="desc" :ratings="ratings"></ratingSelect>
+      <!-- 评价过滤 END-->
+      <!--评价内容列表-->
       <div class="rating-wrapper">
         <ul>
           <li v-for="rating in ratings" v-show="needShow(rating.rateType,rating.text)" class="rating-item border-bottom1px">
+            <!--用户头像-->
             <div class="avatar">
               <img width="28" height="28" :src="rating.avatar" alt="">
             </div>
+            <!--用户头像 END-->
             <div class="content">
+              <!--用户名-->
               <h1 class="name">{{rating.username}}</h1>
+              <!--评价 以及 送达时间 -->
               <div class="star-wrapper">
                 <star :size="24" :score="rating.score"></star>
                 <span class="delivery" v-show="rating.deliveryTime">{{rating.deliveryTime}}分钟送达</span>
               </div>
+              <!--评价内容 -->
               <p class="text">{{rating.text}}</p>
+              <!--推荐内容 -->
               <div class="recommend" v-show="rating.recommend.length">
                 <i class="icon-thumb_up"></i>
                 <span v-for="item in rating.recommend" class="item">{{item}}</span>
               </div>
+              <!--评论时间 -->
               <div class="time">{{rating.rateTime | formatDate}}</div>
             </div>
           </li>
         </ul>
       </div>
+      <!--评价内容列表 END-->
     </div>
   </div>
 </template>
@@ -100,13 +113,16 @@
       })
     },
     methods:{
+      // 传入 评价类型,和值
       needShow(rateType,text){
+        // 当是只显示有文字的评论 以及 值为空的时候 返回 false 不显示当前项
         if (this.onlyContent && !text) {
           return false;
         }
+        // 评价类型为全部时 返回 true 全部显示
         if (this.selectType === ALL) {
           return true;
-        } else {
+        } else {  // 否则,只显示传入的类型
           return this.selectType === rateType;
         }
       }

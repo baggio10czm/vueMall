@@ -23,13 +23,13 @@
       return {}
     },
     computed: {
-      starType() {
+      starType() {  // 根据传进来的 size 生成对应的 CLASS
         return 'star-' + this.size
       },
-      itemClsses(){
+      itemClsses(){  // 根据分数生成对应的 class 数组
         let res = [];
         let score = Math.floor(this.score * 2) / 2;
-        let hasDecimal = score % 1 !== 0;
+        let hasDecimal = score % 1 !== 0;    // 判断是否有 半星
         let integer = Math.floor(score);
         for (let i = 0; i < integer; i++) {
           res.push(GLS_ON);
@@ -37,7 +37,7 @@
         if(hasDecimal){
           res.push(GLS_HALF);
         }
-        while (res.length < LENGTH){
+        while (res.length < LENGTH){   // 当数量不够 拿空星补够
           res.push(GLS_OFF);
         }
         return res;

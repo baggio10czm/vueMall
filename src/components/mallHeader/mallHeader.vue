@@ -1,9 +1,12 @@
 <template>
   <div class="header">
     <div class="content-wrapper" v-if="seller">
+      <!--商家图-->
       <div class="avatar">
         <img width="64" height="64" :src="seller.avatar" alt="">
       </div>
+      <!--商家图 END -->
+      <!--商家信息-->
       <div class="content">
         <div class="title">
           <span class="brand"></span>
@@ -17,18 +20,26 @@
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
+      <!--商家信息 END -->
+      <!--商家服务个数-->
       <div v-if="seller.supports" class="supports-count" @click="showDetail">
         <span class="count ceshi">{{seller.supports.length}}个</span>
         <span class="icon-keyboard_arrow_right"></span>
       </div>
+      <!--商家服务个数 END -->
     </div>
+    <!--商家公告-->
     <div class="bulletin-wrapper" @click="showDetail">
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
+    <!--商家公告 END -->
+    <!--背景图-->
     <div class="background">
       <img :src="seller.avatar" alt="" width="100%" height="100%" >
     </div>
+    <!--背景图 END -->
+    <!--商家详情-->
     <transition name="detail-ani">
       <div class="detail" v-show="detailShow">
         <div class="detail-wrapper clearfix">
@@ -63,6 +74,7 @@
         </div>
       </div>
     </transition>
+    <!--商家详情 END -->
   </div>
 </template>
 
