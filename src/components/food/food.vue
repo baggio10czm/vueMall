@@ -2,13 +2,16 @@
   <transition name="food-ani">
     <div v-show="showFlag" class="food" ref="foodWrapper">
       <div class="food-content">
+        <!--商品图片-->
         <div class="image-header">
           <img :src="food.image" alt="">
           <div class="back-wrapper" @click="hide">
             <i class="icon-arrow_lift"></i>
           </div>
         </div>
+        <!--商品图片 end-->
         <div class="content">
+          <!--商品标题,销售信息-->
           <h1 class="title">{{food.name}}</h1>
           <div class="detail">
             <span class="sell-count">月售{{food.sellCount}}份</span>
@@ -19,18 +22,24 @@
             <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
           </div>
           <div class="cartControl-wrapper">
+            <!-- 因点了加入购物车,商品数量变成1,所以cartControl会有一个动画效果-->
             <cartControl :food="food" @addCart="addCart"></cartControl>
           </div>
+          <!-- 点了加入购物车本体隐藏,被遮盖在其下的 cartControl才看的见 -->
           <transition name="buy-ani">
             <div class="buy" v-show="!food.count|| food.count === 0" @click.stop="addFirst($event)">加入购物车</div>
           </transition>
+          <!--商品标题,销售信息 end-->
         </div>
         <split v-if="food.info"></split>
+        <!--商品信息-->
         <div class="info" v-if="food.info">
           <h1 class="title">商品信息</h1>
           <p class="text">{{food.info}}</p>
         </div>
+        <!--商品信息 end-->
         <split></split>
+        <!--商品评价-->
         <div class="rating">
           <h1 class="title">商品评价</h1>
           <ratingSelect :selectType="selectType" :onlyContent="onlyContent" :desc="desc"
@@ -52,6 +61,7 @@
             <div class="no-rating" v-show="!food.ratings || !food.ratings.length">毫无评价可言！</div>
           </div>
         </div>
+        <!--商品评价 END-->
       </div>
     </div>
   </transition>
@@ -113,12 +123,12 @@
         this.$emit('addCart', el);
       },
       needShow(rateType, text) {
-        if (this.onlyContent && !text) {
+        if (this.onlyContent && !text) { // 当是只显示有文字的评论 以及 值为空的时候 返回 false 不显示当前项
           return false;
-        }
+        } // 评价类型为全部时 返回 true 全部显示
         if (this.selectType === ALL) {
           return true;
-        } else {
+        } else {// 否则,只显示传入的类型
           return this.selectType === rateType;
         }
       },
